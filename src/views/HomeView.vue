@@ -11,21 +11,18 @@
         cancelText="Annuler"
         @getFiles="getFiles"
         @getImage="getImage"
-       
+        @sendForm="sendForm"
        ></vform>
-
-       <pre>
-        {{ champs }}
-       </pre>
-       
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
 import { ref,reactive } from 'vue';
-import { extractFormData } from '@/utils/index'
+import { extractFormData,resetForm } from '@/utils/index'
 import Vform from '@/components/Vform.vue'
+import type { FormData } from '@/types/formData';
+
 
 const optionsCheckbox = reactive([
   {id:1,name:"Orange"},
@@ -42,7 +39,7 @@ const optionsRadio = reactive([
   {id:4,name:'Autre'}
 ])
 const projetAttributs = ['nom', 'description', 'debut', 'fin', 'objectifGlobaux', 'budgetNational', 'pret', 'couleur', 'ville', 'bailleurId', 'tauxEngagement']
-const champs = ref([
+const champs = ref<FormData[]>([
   { name: 'Nom du projet', key: "nom", type: 'text', placeholder: "Nom du projet", data: '', required: true, errors: [] },
   { name: 'Prêt', type: 'number', key: "pret", placeholder: "", data: '', required: true, errors: [] },
   { name: 'Budget Nationnal', key: "budgetNational", type: 'number', placeholder: "", data: '', required: true, errors: [] },
@@ -55,7 +52,7 @@ const champs = ref([
   { name: 'Taux engagement', key: "tauxEngagement", type: 'text', placeholder: 'Taux engagement', data: '', required: false, errors: [] },
   { name: 'Description', key: "description", placeholder: 'Description du projet', isTextArea: true, data: '', required: false, errors: [] },
   { name: 'Objectifs globaux', key: "objectifGlobaux", placeholder: '', isTextArea: true, data: '', required: false, errors: [] },
-  { name: 'Votre fruits preferé',key:"fruits", placeholder: '', isCheckbox:true, data: '', options: optionsCheckbox, value: 'name',position:'horizontal', required: false, errors: [] },
+  { name: 'Votre fruits preferé',key:"fruits", placeholder: '', isCheckbox:true, data: [], options: optionsCheckbox, value: 'name',position:'horizontal', required: false, errors: [] },
   { name: 'Votre genre',key:"genre", data: '', options: optionsRadio,isRadio:true,  value: 'name',position:'vertical', required: false, errors: [] },
 ])
 const cols = ref<number>(2)
@@ -66,6 +63,13 @@ function getFiles(files:FileList) {
 
 function getImage(image: FileList) {
   console.log(image)
+}
+
+
+function sendForm() {
+  const data = extractFormData(champs.value,projetAttributs)
+  champs.value = resetForm(champs.value)
+  console.log(champs.value,data)
 }
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="save" id="vform">
-    <div :class="colonnes">
+    <div :style="`display:grid;grid-template-columns: repeat(${props.cols},1fr);`" class="gap-4">
       <div v-for="champ in props.champs" :key="champ.id">
         <!-- native type text,file,color,date... -->
         <div v-if="champ.type !== undefined">
@@ -59,17 +59,21 @@
             <div 
               :class="{'flex flex-row':champ.position === 'horizontal','flex flex-col': champ.position ==='vertical'}" 
               class="items-center  justify-between">
-              <label v-for="(item,index) in champ.options" :key="index" class=""> 
+              
+              <label v-for="(item,index) in champ.options" :key="index" class="">
+               
                 <input  
                 v-model="champ.data" 
                 class="px-3 mx-2 py-2 mt-1 border-2 border-gray-300  focus:outline-none focus:ring-2  focus:border-transparent" 
                 :name="champ.key" 
                 :id="index.toString()" 
                 v-if="champ.value"
-                :value="item[champ.value]" 
+                :value="item" 
                 type="checkbox" /> 
                 <span v-if="champ.value">{{item[champ.value]}} </span>
+
               </label>
+
             </div>
             <div  v-for="(error, key) in champ.errors" :key="key">
                 <span class="text-red-500 absolute right-4 top-2"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1.8em" width="1.6em" xmlns="http://www.w3.org/2000/svg"><path d="M437.332 80H74.668C51.199 80 32 99.198 32 122.667v266.666C32 412.802 51.199 432 74.668 432h362.664C460.801 432 480 412.802 480 389.333V122.667C480 99.198 460.801 80 437.332 80zM432 170.667L256 288 80 170.667V128l176 117.333L432 128v42.667z"></path></svg></span>
@@ -90,10 +94,11 @@
                 :name="champ.key" 
                 :id="index.toString()" 
                 v-if="champ.value"
-                :value="item[champ.value]" 
+                :value="item" 
                 type="radio" /> 
                 <span v-if="champ.value">{{item[champ.value]}} </span>
               </label>
+              
             </div>
             <div  v-for="(error, key) in champ.errors" :key="key">
                 <span class="text-red-500 absolute right-4 top-2"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1.8em" width="1.6em" xmlns="http://www.w3.org/2000/svg"><path d="M437.332 80H74.668C51.199 80 32 99.198 32 122.667v266.666C32 412.802 51.199 432 74.668 432h362.664C460.801 432 480 412.802 480 389.333V122.667C480 99.198 460.801 80 437.332 80zM432 170.667L256 288 80 170.667V128l176 117.333L432 128v42.667z"></path></svg></span>
@@ -103,8 +108,7 @@
             </div>
         </div>
       </div>
-  </div>
-
+    </div>
 
     <div class="py-2 my-2 flex justify-center space-x-8">
       <vbutton  type="submit"  template="success"> {{props.submitText}} </vbutton>
@@ -134,14 +138,10 @@ interface Props {
   sendRequest:boolean
   isRounded:boolean
 }
-const emits = defineEmits(['getFiles','getImage'])
+const emits = defineEmits(['getFiles','getImage','sendForm'])
 const props = defineProps<Props>()
-const colonnes  = ref('grid grid-cols-'+props.cols+' gap-4')
 const files  = ref<object>()
 const image  = ref<object>()
-function save () {
-
-}
 
 function previewFiles(event :any) {
   if(event.target) {
@@ -154,6 +154,10 @@ function  previewImage(event :any) {
     image.value = event.target.files[0]
     emits('getImage',image.value)
   }
+}
+
+function save() {
+  emits('sendForm')
 }
 
 </script>
