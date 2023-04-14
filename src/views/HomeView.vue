@@ -1,11 +1,23 @@
 <template>
   <main>
     <div class="container  mx-auto ">
+      <Vinput 
+      template="default"
+      type="text"
+      :required="true"   
+      placeholder="une demo" 
+      label="Une demo"
+      v-model="demo"
+      
+      />
+      <pre>
+        {{ demo }}
+      </pre>
       <vform 
         template="default"
         :isRounded="true" 
         :sendRequest="false" 
-        :champs="champs" 
+        :inputs="champs" 
         :cols="cols" 
         submitText="Envoyé"
         cancelText="Annuler"
@@ -13,6 +25,7 @@
         @getImage="getImage"
         @sendForm="sendForm"
        ></vform>
+
     </div>
   </main>
 </template>
@@ -22,7 +35,10 @@ import { ref,reactive } from 'vue';
 import { extractFormData,resetForm } from '@/utils/index'
 import Vform from '@/components/Vform.vue'
 import type { FormData } from '@/types/formData';
+import type { Option } from '@/types/options';
+import  Vinput from '@/components/Vinput.vue';
 
+const demo = ref('')
 
 const optionsCheckbox = reactive([
   {id:1,name:"Orange"},
@@ -30,6 +46,13 @@ const optionsCheckbox = reactive([
   {id:3,name:"Banane"},
   {id:4,name:"Papaye"},
   {id:5,name:"Citron"},
+])
+
+
+const Roles = reactive<Option[]>([
+  {id:2,name:'Responsable'},
+  {id:3,name:'Controleur'},
+  {id:4,name:'Agent'}
 ])
 
 const optionsRadio = reactive([
@@ -54,6 +77,8 @@ const champs = ref<FormData[]>([
   { name: 'Objectifs globaux', key: "objectifGlobaux", placeholder: '', isTextArea: true, data: '', required: false, errors: [] },
   { name: 'Votre fruits preferé',key:"fruits", placeholder: '', isCheckbox:true, data: [], options: optionsCheckbox, value: 'name',position:'horizontal', required: false, errors: [] },
   { name: 'Votre genre',key:"genre", data: '', options: optionsRadio,isRadio:true,  value: 'name',position:'vertical', required: false, errors: [] },
+  { name: 'Profil',key:"role", placeholder: '', isSelect:true, data: [], options: Roles,  required: false, errors: [] },
+
 ])
 const cols = ref<number>(2)
 

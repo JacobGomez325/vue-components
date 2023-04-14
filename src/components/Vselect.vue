@@ -89,7 +89,7 @@ import type { Option } from '@/types/options';
 import { ref,computed,reactive } from 'vue'
 import type { PropType } from 'vue';
 
-const emits = defineEmits(['getData'])
+const emits = defineEmits(['update:modelValue'])
 const props = defineProps({
   options:{
     required: true,
@@ -98,6 +98,9 @@ const props = defineProps({
   multiple: {
     required: true,
     type:Boolean 
+  },
+  modelValue: {
+    required: true,
   }
 })
 
@@ -127,11 +130,11 @@ const addItem = (item:any,index:number) => {
   if(props.multiple) {
     items.push(item)
     resultQuery.value.splice(index, 1)
-    emits('getData',items)
+    emits('update:modelValue',items)
   }else {
     const items = item
     searchQuery.value = item.name
-    emits('getData',items)
+    emits('update:modelValue',items)
     openSelect.value = false
     
   }
