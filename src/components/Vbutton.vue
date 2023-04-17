@@ -51,7 +51,10 @@
     template: string
   }
 
-  const props = defineProps<Props>()
+  const props = withDefaults(defineProps<Props>(),{
+    type: "button",
+    template:'default'
+  })
   const emits = defineEmits(['click','submit','reset'])
   function handleClick() {
     if(props.type !== undefined) {emits('click')}

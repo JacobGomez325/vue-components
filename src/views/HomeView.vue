@@ -1,31 +1,82 @@
 <template>
   <main>
     <div class="container  mx-auto ">
-      <Vinput 
-      template="default"
-      type="text"
-      :required="true"   
-      placeholder="une demo" 
-      label="Une demo"
-      v-model="demo"
-      
-      />
-      <pre>
-        {{ demo }}
-      </pre>
-      <vform 
-        template="default"
-        :isRounded="true" 
-        :sendRequest="false" 
-        :inputs="champs" 
-        :cols="cols" 
-        submitText="Envoyé"
-        cancelText="Annuler"
-        @getFiles="getFiles"
-        @getImage="getImage"
-        @sendForm="sendForm"
-       ></vform>
+      <div class="pt-8">
+        <h1 class="py-4 text-3xl font-semibold">Mes composants </h1>
+        <div class='grid grid-cols-2 gap-4'>
+        
+          <div>
+            <h3 class="py-3"> Select simple  :</h3>
+              <Vselect 
+                :options="fruits"
+                :multiple="false"
+                v-model="items"
+              />
+              <p class="py-2">
+                valeur: {{items}}
+              </p>
+            </div>
 
+            <div>
+            <h3 class="py-3"> Select simple avec target  :</h3>
+              <Vselect 
+                :options="fruits"
+                :multiple="false"
+                target="name"
+                v-model="itemsT"
+              />
+              <p class="py-2">
+                valeur: {{itemsT}}
+              </p>
+            </div>
+
+            <div>
+              <h3 class="py-3"> Select multiple sans target  :</h3>
+              <Vselect 
+                :options="fruits"
+                :multiple="true"
+                target="name"
+                v-model="itemsMultiple"
+              />
+              <p class="py-2">
+                valeur: {{itemsMultiple}}
+              </p>
+            </div>
+
+            <div>
+              <h3 class="py-3"> Select multiple avec target  :</h3>
+              <Vselect 
+                :options="fruits"
+                :multiple="true"
+                target="name"
+                v-model="itemsMultipleT"
+              />
+              <p class="py-2">
+                valeur: {{itemsMultipleT}}
+              </p>
+            </div>
+
+          </div>
+        
+          <div>
+            <h1 class="font-semibold py-4">Vform</h1>
+            <vform 
+            template="default"
+            :isRounded="true" 
+            :sendRequest="false" 
+            :inputs="inputs" 
+            :cols="cols" 
+            submitText="Envoyé"
+            cancelText="Annuler"
+            @getFiles="getFiles"
+            @getImage="getImage"
+            @sendForm="sendForm"
+          ></vform>
+          </div>
+
+      </div>
+      
+      
     </div>
   </main>
 </template>
@@ -36,9 +87,20 @@ import { extractFormData,resetForm } from '@/utils/index'
 import Vform from '@/components/Vform.vue'
 import type { FormData } from '@/types/formData';
 import type { Option } from '@/types/options';
-import  Vinput from '@/components/Vinput.vue';
+import Vselect from '@/components/Vselect.vue';
 
-const demo = ref('')
+const fruits = reactive<Option[]>([
+  {id:1,name:'tomate'},
+  {id:2,name:'mangue'},
+  {id:3,name:'banane'},
+  {id:4,name:'orange'},
+  {id:5,name:'papaye'},
+])
+
+const items = ref<Option[] | Option>([])
+const itemsT = ref<Option[] | Option>([])
+const itemsMultiple = ref<Option[] | Option>([])
+const itemsMultipleT = ref<Option[] | Option>([])
 
 const optionsCheckbox = reactive([
   {id:1,name:"Orange"},
@@ -62,7 +124,7 @@ const optionsRadio = reactive([
   {id:4,name:'Autre'}
 ])
 const projetAttributs = ['nom', 'description', 'debut', 'fin', 'objectifGlobaux', 'budgetNational', 'pret', 'couleur', 'ville', 'bailleurId', 'tauxEngagement']
-const champs = ref<FormData[]>([
+const inputs = ref<FormData[]>([
   { name: 'Nom du projet', key: "nom", type: 'text', placeholder: "Nom du projet", data: '', required: true, errors: [] },
   { name: 'Prêt', type: 'number', key: "pret", placeholder: "", data: '', required: true, errors: [] },
   { name: 'Budget Nationnal', key: "budgetNational", type: 'number', placeholder: "", data: '', required: true, errors: [] },
@@ -78,7 +140,6 @@ const champs = ref<FormData[]>([
   { name: 'Votre fruits preferé',key:"fruits", placeholder: '', isCheckbox:true, data: [], options: optionsCheckbox, value: 'name',position:'horizontal', required: false, errors: [] },
   { name: 'Votre genre',key:"genre", data: '', options: optionsRadio,isRadio:true,  value: 'name',position:'vertical', required: false, errors: [] },
   { name: 'Profil',key:"role", placeholder: '', isSelect:true, data: [], options: Roles,  required: false, errors: [] },
-
 ])
 const cols = ref<number>(2)
 
@@ -92,9 +153,9 @@ function getImage(image: FileList) {
 
 
 function sendForm() {
-  const data = extractFormData(champs.value,projetAttributs)
-  champs.value = resetForm(champs.value)
-  console.log(champs.value,data)
+  const data = extractFormData(inputs.value,projetAttributs)
+  inputs.value = resetForm(inputs.value)
+  console.log(inputs.value,data)
 }
 </script>
 

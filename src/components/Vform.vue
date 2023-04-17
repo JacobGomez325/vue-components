@@ -91,11 +91,9 @@
             :options="input.options"
             :multiple="false"
             v-model="input.data"
-            @getData="input.data = $event"
+           
           />
-          <pre>
-            {{ input.data }}
-          </pre>
+         
         </div>
         <div v-else-if="input.isRadio === true" class="my-2">
             <label class="text-sm font-semibold   block uppercase md:text-sm text-light"> {{input.name}} <span class="px-2 text-lg font-black text-red-700">*</span></label>
@@ -147,7 +145,6 @@ import Vselect from '@/components/Vselect.vue';
 
 import type { FormData } from '@/types/formData';
 
-
 interface Props {
   inputs: FormData[]
   cols?: number
@@ -157,7 +154,12 @@ interface Props {
   isRounded:boolean
 }
 const emits = defineEmits(['getFiles','getImage','sendForm'])
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(),{
+  cols:1,
+  submitText:'Envoyer',
+  cancelText:'Annuler',
+  isRounded:false
+})
 const files  = ref<object>()
 const image  = ref<object>()
 
@@ -178,7 +180,7 @@ function save() {
   emits('sendForm')
 }
 
-function getData() {}
+
 
 </script>
 <style>

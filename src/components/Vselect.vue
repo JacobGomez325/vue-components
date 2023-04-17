@@ -16,7 +16,7 @@
         </p>
       </div>
       <input  
-        class="px-4 rounded py-2  border border-white  bg-white shadow outile-none focus:outline-none focus:ring-2 w-full focus:ring-blue-500/50 focus:border-transparent"
+        class="px-4 rounded-2xl py-2  border border-white  bg-white shadow outile-none focus:outline-none focus:ring-2 w-full focus:ring-blue-500/50 focus:border-transparent"
         placeholder="Selectionnez un element ..."
         :readonly="!openSelect"
         v-model="searchQuery"
@@ -97,7 +97,10 @@ const props = defineProps({
   },
   multiple: {
     required: true,
-    type:Boolean 
+    type:Boolean as PropType<boolean>
+  },
+  target:{
+    type:String as PropType<string>
   },
   modelValue: {
     required: true,
@@ -130,11 +133,23 @@ const addItem = (item:any,index:number) => {
   if(props.multiple) {
     items.push(item)
     resultQuery.value.splice(index, 1)
-    emits('update:modelValue',items)
+    const resultTarget =  []
+    for (let index = 0; index < items.length; index++) {
+      const element = items[index];
+      if(props.target) {
+        const targetResult =  element[props.target]
+        resultTarget.push(targetResult)
+      }
+   }
+   if(props.target) {emits('update:modelValue',resultTarget)}
+   else {emits('update:modelValue',items)}
+    
   }else {
     const items = item
     searchQuery.value = item.name
-    emits('update:modelValue',items)
+    if(props.target) {emits('update:modelValue',items[props.target])}
+    else {emits('update:modelValue',items)}
+    
     openSelect.value = false
     
   }
