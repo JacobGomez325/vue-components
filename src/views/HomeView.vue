@@ -20,7 +20,7 @@
             <div>
             <h3 class="py-3"> Select simple avec target  :</h3>
               <Vselect 
-                :options="fruits"
+                :options="fruitsT"
                 :multiple="false"
                 target="name"
                 v-model="itemsT"
@@ -33,7 +33,7 @@
             <div>
               <h3 class="py-3"> Select multiple sans target  :</h3>
               <Vselect 
-                :options="fruits"
+                :options="fruitsMultiple"
                 :multiple="true"
                 target="name"
                 v-model="itemsMultiple"
@@ -46,7 +46,7 @@
             <div>
               <h3 class="py-3"> Select multiple avec target  :</h3>
               <Vselect 
-                :options="fruits"
+                :options="fruitsMultipleT"
                 :multiple="true"
                 target="name"
                 v-model="itemsMultipleT"
@@ -60,7 +60,8 @@
         
           <div>
             <h1 class="font-semibold py-4">Vform</h1>
-            <vform 
+           
+            <Vform 
             template="default"
             :isRounded="true" 
             :sendRequest="false" 
@@ -71,7 +72,7 @@
             @getFiles="getFiles"
             @getImage="getImage"
             @sendForm="sendForm"
-          ></vform>
+          />
           </div>
 
       </div>
@@ -90,6 +91,27 @@ import type { Option } from '@/types/options';
 import Vselect from '@/components/Vselect.vue';
 
 const fruits = reactive<Option[]>([
+  {id:1,name:'tomate'},
+  {id:2,name:'mangue'},
+  {id:3,name:'banane'},
+  {id:4,name:'orange'},
+  {id:5,name:'papaye'},
+])
+const fruitsT = reactive<Option[]>([
+  {id:1,name:'tomate'},
+  {id:2,name:'mangue'},
+  {id:3,name:'banane'},
+  {id:4,name:'orange'},
+  {id:5,name:'papaye'},
+])
+const fruitsMultiple = reactive<Option[]>([
+  {id:1,name:'tomate'},
+  {id:2,name:'mangue'},
+  {id:3,name:'banane'},
+  {id:4,name:'orange'},
+  {id:5,name:'papaye'},
+])
+const fruitsMultipleT = reactive<Option[]>([
   {id:1,name:'tomate'},
   {id:2,name:'mangue'},
   {id:3,name:'banane'},
